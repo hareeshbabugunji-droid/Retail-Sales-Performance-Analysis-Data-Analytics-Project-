@@ -1,20 +1,12 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 df = pd.read_csv("sales.csv")
 
-print(df.head())
-print(df.describe())
-print(df.isnull().sum())
+df['Order_Date'] = pd.to_datetime(df['Order_Date'])
+df['Month'] = df['Order_Date'].dt.month
+df['Quarter'] = df['Order_Date'].dt.quarter
 
-df.fillna(df.mean(numeric_only=True), inplace=True)
-
-df['Revenue'] = df['Quantity'] * df['Price']
-
-monthly_sales = df.groupby('Month')['Revenue'].sum()
-print(monthly_sales)
-
-monthly_sales.plot(kind='line')
-plt.title("Monthly Sales Trend")
-plt.show()
+df['Revenue'] = df['Quantity'] * df['Unit_Price']
